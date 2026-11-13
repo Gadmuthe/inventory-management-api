@@ -1,88 +1,51 @@
-# Inventory Management API
+# Inventory Management System
 
-A backend application built using Python and FastAPI to manage inventory products with secure user authentication and PostgreSQL database integration.
+A full-stack inventory application built with React, FastAPI, PostgreSQL, JWT authentication, Docker and pytest.
 
 ## Features
+- User registration and JWT login
+- Authenticated product CRUD
+- Search by product name/category and category filter
+- Inventory metrics and low-stock indicator
+- Docker Compose PostgreSQL + API setup
 
-- User registration and login
-- Password hashing for secure password storage
-- JWT-based authentication
-- Create new products
-- View all products
-- View individual products
-- Update product details
-- Delete products
-- PostgreSQL database integration
-- Automated API testing using pytest
+## Run with Docker
+1. Install Docker Desktop.
+2. From the project root run:
+   ```bash
+   docker compose up --build
+   ```
+3. API docs: http://localhost:8002/docs
+4. Frontend:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+5. Open http://localhost:5173
 
-## Tech Stack
-
-- **Language:** Python
-- **Framework:** FastAPI
-- **Database:** PostgreSQL
-- **ORM:** SQLAlchemy
-- **Authentication:** JWT, OAuth2
-- **Password Security:** pwdlib
-- **Testing:** pytest, FastAPI TestClient
-- **API Documentation:** Swagger UI
-- **Environment Management:** python-dotenv
-
-## Project Structure
-
-```text
-inventory_management_api/
-│
-├── main.py
-├── database.py
-├── test_main.py
-├── requirements.txt
-├── .gitignore
-├── .env
-└── README.md
+## Register a user
+Use `POST /register` in Swagger with:
+```json
+{"username":"your_username","password":"choose_a_password_8_chars_or_more"}
 ```
+Then sign in from the frontend.
 
-## Setup Instructions
-
-1. Clone the repository.
-2. Create and activate a Python virtual environment.
-3. Install dependencies:
-
+## Local backend without Docker
+Set `DATABASE_URL` to a reachable PostgreSQL database, install `backend/requirements.txt`, then run:
 ```bash
-pip install -r requirements.txt
+cd backend
+uvicorn main:app --reload --port 8002
 ```
 
-4. Create a `.env` file and add your secret key:
-
-```env
-SECRET_KEY=your_secret_key
-```
-
-5. Configure your PostgreSQL database connection in `database.py`.
-
-6. Start the application:
-
+## Tests
+From `backend`:
 ```bash
-uvicorn main:app --reload
+pytest -q
 ```
 
-## API Documentation
-
-Once the application is running, open:
-
-`http://127.0.0.1:8000/docs`
-
-Swagger UI provides interactive API documentation and testing.
-
-## Run Automated Tests
-
-```bash
-python -m pytest -v
-```
-
-## Authentication
-
-Product endpoints require a valid JWT access token. Users must register and log in to access protected inventory operations.
-
-## Project Status
-
-Core CRUD operations, database integration, JWT authentication, and automated tests implemented.
+## Environment and security
+- Copy `backend/.env.example` to `backend/.env` for local configuration if needed.
+- Never commit `.env`, passwords, database credentials, or production JWT secrets.
+- The default Compose credentials and JWT secret are for local development only. Change them before deployment.
+- Configure `VITE_API_URL` at frontend build time when deploying the frontend.
